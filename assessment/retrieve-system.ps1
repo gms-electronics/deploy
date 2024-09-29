@@ -22,7 +22,7 @@ $deviceDocNotificationMessage = 'Please enter the repair number (YYYY / XXXXXX),
 $deviceDoc = Read-Host $deviceDocNotificationMessage
 
 # Enter Device GPU Details
-Get-WmiObject Win32_VideoController
+Get-WmiObject Win32_VideoController | Select Description
 $deviceGPUInternalNotification = 'Please enter the internal GPU model from the list above'
 $deviceGPUInternal = Read-Host $deviceGPUInternalNotification
 $deviceGPUDiscreteNotification = 'If there are more than one GPUs enter the discrete GPU model (nVidia or ATI) from the list above, leave empty if there is only one GPU'
