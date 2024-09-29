@@ -5,6 +5,9 @@
 # Allow custom scripts
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
+# Map Network Drives without user entry rely on bat otherwise uncomment rows below and customize
+# New-PSDrive -Name Y -PSProvider FileSystem -Root \\mi-ap-deploy-1\Analysis -Credential mi-ap-deploy-1\gms
+
 # Collect the info from WMI & Other sources
 $computerSystem = get-wmiobject Win32_ComputerSystem
 $computerBIOS = get-wmiobject Win32_BIOS
