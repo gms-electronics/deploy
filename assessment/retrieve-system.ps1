@@ -24,9 +24,9 @@ $deviceDoc = Read-Host $deviceDocNotificationMessage
 # Enter Device GPU Details
 Get-WmiObject Win32_VideoController
 $deviceGPUInternalNotification = 'Please enter the internal GPU model from the list above'
-$deviceGPUInternal = Read-Host $deviceGPUInternalNotificationMessage
+$deviceGPUInternal = Read-Host $deviceGPUInternalNotification
 $deviceGPUDiscreteNotification = 'If there are more than one GPUs enter the discrete GPU model (nVidia or ATI) from the list above, leave empty if there is only one GPU'
-$deviceGPUDiscrete = Read-Host $deviceGPUDiscreteNotificationMessage
+$deviceGPUDiscrete = Read-Host $deviceGPUDiscreteNotification
 
 #Build the CSV file
 $csvObject = New-Object PSObject -property @{
@@ -36,7 +36,6 @@ $csvObject = New-Object PSObject -property @{
     'SerialNumber' = $computerBIOS.SerialNumber
     'CPU' = $computerCPU.Name
     'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
-    'TPMv' = $computerTPM.SpecVersion
     'deviceGPUInternal' = $deviceGPUInternal
     'deviceGPUDiscrete' = $deviceGPUDiscrete
     'HDDManufacturer' = $computerHDD.Manufacturer
@@ -45,6 +44,7 @@ $csvObject = New-Object PSObject -property @{
     'HDDType' = $computerHDD.MediaType
     'HDDSize' = "{0:N2}" -f ($computerHDD.Size/1GB)
     'OS' = $computerOS.caption
+    'TPMv' = $computerTPM.SpecVersion
     } 
 
 #Export the fields you want from above in the specified order
