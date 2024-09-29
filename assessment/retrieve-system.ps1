@@ -82,7 +82,7 @@ $csvObject = New-Object PSObject -property @{
     } 
 
 #Export the fields you want from above in the specified order
-$csvObject | Select deviceDoc, Manufacturer, SerialNumber, Model, CPU, Ram, HDDSize, HDDType | Export-Csv 'system-info.csv' -NoTypeInformation -Append
+$csvObject | Select deviceDoc, Manufacturer, SerialNumber, Model, CPU, RAM, HDDSize, HDDType, HDDInterface, deviceGPUInternal, deviceGPUDiscrete, deviceGrade, HDDManufacturer, HDDModel, OS, TPMv | Export-Csv 'system-info.csv' -NoTypeInformation -Append
 
 # Open CSV file for review (leave this line out when deploying)
 notepad system-info.csv
