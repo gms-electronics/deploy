@@ -2,6 +2,9 @@
 # Run this PowerShelll script at log on to collect PC information to a CSV file on a network share
 # Thom McKiernan 28/08/2014
 
+# Allow custom scripts
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+
 # Collect the info from WMI & Other sources
 $computerSystem = get-wmiobject Win32_ComputerSystem
 $computerBIOS = get-wmiobject Win32_BIOS
@@ -49,3 +52,6 @@ $csvObject | Select deviceDoc, Manufacturer, SerialNumber, Model, CPU, Ram, HDDS
 
 # Open CSV file for review (leave this line out when deploying)
 notepad system-info.csv
+
+# Prohibit custom scripts
+Set-ExecutionPolicy -ExecutionPolicy Restricted
