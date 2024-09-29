@@ -14,9 +14,16 @@ $computerHDD = Get-WmiObject Win32_DiskDrive
 $computerTPM = Get-WmiObject Win32_Tpm 
 #$computerHDD = Get-WmiObject Win32_LogicalDisk -Filter drivetype=3
 
-# Enter Device Details
-$deviceNotificationMessage = 'Please enter the repair number (YYYY / XXXXXX) or PINV (PINV-XXXXX)'
-$deviceDoc = Read-Host $deviceNotificationMessage
+# Enter Device Doc
+$deviceDocNotificationMessage = 'Please enter the repair number (YYYY / XXXXXX), PINV (PINV-XXXXX) or Asset Number'
+$deviceDoc = Read-Host $deviceDocNotificationMessage
+
+# Enter Device GPU Details
+Get-WmiObject Win32_VideoController
+$deviceGPUInternalNotification = 'Please enter the internal GPU model from the list above'
+$deviceGPUInternal = Read-Host $deviceGPUInternalNotificationMessage
+$deviceGPUDiscreteNotification = 'If there are more than one GPUs enter the discrete GPU model (nVidia or ATI) from the list above, leave empty if there is only one GPU'
+$deviceGPUDiscrete = Read-Host $deviceGPUDiscreteNotificationMessage
 
 #Build the CSV file
 $csvObject = New-Object PSObject -property @{
@@ -27,6 +34,8 @@ $csvObject = New-Object PSObject -property @{
     'CPU' = $computerCPU.Name
     'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
     'TPMv' = $computerTPM.SpecVersion
+    'deviceGPUInternal' = $deviceGPUInternal
+    'deviceGPUDiscrete' = $deviceGPUDiscrete
     'HDDManufacturer' = $computerHDD.Manufacturer
     'HDDModel' = $computerHDD.Model
     'HDDInterface' = $computerHDD.InterfaceType
