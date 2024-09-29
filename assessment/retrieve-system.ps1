@@ -72,17 +72,17 @@ $csvObject = New-Object PSObject -property @{
     'deviceGPUInternal' = $deviceGPUInternal
     'deviceGPUDiscrete' = $deviceGPUDiscrete
     'deviceGrade' = $deviceGrade
+    'HDDType' = $computerHDD.MediaType
+    'HDDSize' = "{0:N2}" -f ($computerHDD.Size/1GB)
     'HDDManufacturer' = $computerHDD.Manufacturer
     'HDDModel' = $computerHDD.Model
     'HDDInterface' = $computerHDD.InterfaceType
-    'HDDType' = $computerHDD.MediaType
-    'HDDSize' = "{0:N2}" -f ($computerHDD.Size/1GB)
     'OS' = $computerOS.caption
     'TPMv' = $computerTPM.SpecVersion
     } 
 
 #Export the fields you want from above in the specified order
-$csvObject | Select deviceDoc, Manufacturer, SerialNumber, Model, CPU, RAM, HDDSize, HDDType, HDDInterface, deviceGPUInternal, deviceGPUDiscrete, deviceGrade, HDDManufacturer, HDDModel, OS, TPMv | Export-Csv 'system-info.csv' -NoTypeInformation -Append
+$csvObject | Select deviceDoc, Manufacturer, Model, SerialNumber, CPU, RAM, deviceGPUInternal, deviceGPUDiscrete, deviceGrade, HDDType, HDDSize, HDDManufacturer, HDDModel, HDDInterface, OS, TPMv | Export-Csv 'system-info.csv' -NoTypeInformation -Append
 
 # Open CSV file for review (leave this line out when deploying)
 notepad system-info.csv
