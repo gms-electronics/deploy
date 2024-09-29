@@ -13,7 +13,7 @@ $computerCPU = get-wmiobject Win32_Processor
 
 # Identifies the drive specifics
 # Parameters used are Manufacturer, Model, SerialNumber, InterfaceType, MediaType, Size
-$computerHDD = Get-WmiObject Win32_DiskDrive
+$computerHDD = Get-WmiObject Win32_DiskDrive | Select -property Manufacturer, Model, InterfaceType, Size, MediaType
 
 # Identifies the TPM specifics
 # Parameters used are SpecVersion
@@ -51,7 +51,7 @@ $validDeviceGrades = @{
     
 # Display the list of valid grades with their corresponding numbers
 Write-Host "Please enter the number corresponding to the grade you wish to select:"
-foreach ($grades in ($validGrades.GetEnumerator())) {
+foreach ($grades in ($validDeviceGrades.GetEnumerator())) {
     Write-Host "[$($grades.Name)] $($grades.Value)"
 }
 
