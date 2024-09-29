@@ -51,7 +51,7 @@ $validDeviceGrades = @{
 # Display the list of valid grades with their corresponding numbers
 Write-Host "Please enter the number corresponding to the grade you wish to select:"
 foreach ($type in ($validGrades.GetEnumerator())) {
-    Write-Host "[$($type.Name)] $($type.Value)"
+    Write-Host "[$($validDeviceGrades.Name)] $($validDeviceGrades.Value)"
 }
 
 # Prompt the user to enter the number of the employee type they want to select
