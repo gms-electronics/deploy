@@ -1,12 +1,6 @@
 # Exports Local System Information to CSV
 # Run this PowerShelll script at log on to collect PC information to a CSV file on a network share
-# Thom McKiernan 28/08/2014
-
-# Allow custom scripts
-Set-ExecutionPolicy -ExecutionPolicy Unrestricted
-
-# Map Network Drives without user entry rely on bat otherwise uncomment rows below and customize
-# New-PSDrive -Name Y -PSProvider FileSystem -Root \\mi-ap-deploy-1\Analysis -Credential mi-ap-deploy-1\gms
+# Authors: Thom McKiernan 28/08/2014, Fabian V. Thobe 12/10/2024
 
 # Collect the info from WMI & Other sources
 $computerSystem = get-wmiobject Win32_ComputerSystem
@@ -14,14 +8,23 @@ $computerBIOS = get-wmiobject Win32_BIOS
 $computerOS = get-wmiobject Win32_OperatingSystem
 $computerCPU = get-wmiobject Win32_Processor
 
+# Check for OEM License
+$computerOEMLicense = Get-WmiObject 'SoftwareLicensingService'
+if ( $computerOEMLicense.OA3xOriginalProductKey -match '[0-9a-z]{5}-[0-9a-z]{5}-[0-9a-z]{5}-[0-9a-z]{5}-[0-9a-z]{5}' ) {
+    if ( $computerOEMLicense.OA3xOriginalProductKeyDescription -match 'Pro') {
+        write-host "Pro"
+    }
+    else {
+        write-host "Home"
+    }
+}
+else { write-host "N/A" }
+#endregion
+
 # Identifies the drive specifics
 # Parameters used are Manufacturer, Model, SerialNumber, InterfaceType, MediaType, Size
-$computerHDD = Get-WmiObject Win32_DiskDrive | Select -property Manufacturer, Model, InterfaceType, Size, MediaType
-
-# Identifies the TPM specifics
-# Parameters used are SpecVersion
-$computerTPM = Get-WmiObject Win32_Tpm 
-
+$computerHDDfilter = “Select InterfaceType from win32_DiskDrive where InterfaceType <> 'USB'”
+$computerHDD = Get-WmiObject win32_DiskDrive -Filter “NOT InterfaceType like 'USB'” | Select -property Manufacturer, Model, InterfaceType, Size, MediaType, SerialNumber
 
 # Enter Device Doc
 $deviceDocNotificationMessage = 'Please enter the repair number (YYYY / XXXXXX), PINV (PINV-XXXXX) or Asset Number'
@@ -36,7 +39,7 @@ $deviceGPUDiscreteNotification = 'If there are more than one GPUs enter the disc
 $deviceGPUDiscrete = Read-Host $deviceGPUDiscreteNotification
 
 # Enter Device Estetics
-$deviceDamageNotification = 'Is the device physically broken?'
+$deviceDamageNotification = 'List the broken components'
 $deviceDamage = Read-Host $deviceDamageNotification
 
 # Enter Device Display
@@ -75,20 +78,18 @@ $csvObject = New-Object PSObject -property @{
     'deviceGPUInternal' = $deviceGPUInternal
     'deviceGPUDiscrete' = $deviceGPUDiscrete
     'deviceGrade' = $deviceGrade
+    'deviceDamage' = $deviceDamage
     'HDDType' = $computerHDD.MediaType
     'HDDSize' = "{0:N2}" -f ($computerHDD.Size/1GB)
     'HDDManufacturer' = $computerHDD.Manufacturer
     'HDDModel' = $computerHDD.Model
+    'HDDSerial' = $computerHDD.SerialNumber
     'HDDInterface' = $computerHDD.InterfaceType
-    'OS' = $computerOS.caption
-    'TPMv' = $computerTPM.SpecVersion
+    'OS' = $computerOEMLicense.OA3xOriginalProductKeyDescription
     } 
 
 #Export the fields you want from above in the specified order
-$csvObject | Select deviceDoc, Manufacturer, Model, SerialNumber, CPU, RAM, deviceGPUInternal, deviceGPUDiscrete, deviceGrade, HDDType, HDDSize, HDDManufacturer, HDDModel, HDDInterface, OS, TPMv | Export-Csv 'system-info.csv' -NoTypeInformation -Append
+$csvObject | Select deviceDoc, Manufacturer, Model, SerialNumber, CPU, RAM, deviceGPUInternal, deviceGPUDiscrete, deviceGrade, deviceDamage, HDDType, HDDSize, HDDManufacturer, HDDModel, HDDSerial, HDDInterface, OS | Export-Csv -Path X:\system-info-test.csv -NoTypeInformation -Append
 
 # Open CSV file for review (leave this line out when deploying)
-notepad system-info.csv
-
-# Prohibit custom scripts
-Set-ExecutionPolicy -ExecutionPolicy Restricted
+notepad system-info-test.csv 
