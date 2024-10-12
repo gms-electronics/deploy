@@ -19,7 +19,7 @@ if ( $computerOEMLicense.OA3xOriginalProductKey -match '[0-9a-z]{5}-[0-9a-z]{5}-
     }
 }
 else { write-host "N/A" }
-#endregion
+# End check oem license
 
 # Identifies the drive specifics
 # Parameters used are Manufacturer, Model, SerialNumber, InterfaceType, MediaType, Size
