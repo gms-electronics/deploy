@@ -12,7 +12,7 @@ This guide removes all encryption keys and formats the data on the drive, subseq
 # Guide
 
 ## Prepare BIOS / UEFI
-1. Enter BIOS / UEFI
+1. Access the BIOS using following shortcut(s) applicable to your system: 
 Following shortcuts provide access to BIOS
 
 | Vendor / Brand 	|       Type       	|   Keyboard Shortcut   	|
@@ -39,12 +39,17 @@ Boot from Network by choosing PXE or Network boot.
 
 4. Select the appropriate Installation Profile (Attention: most times the generic installation without drivers should work, if the installation does not complete switch to a manufacturer profile). 
 
-5. Set Administrator Password to "gms" (without quotation marks). 
+5. Set a local Administrator Password like "gms" (without quotation marks), the password will be reset during "sysprep /generalize".
 
-# Known Issues
+# Known MDT / WDS / ADK Issues
 ## Old Systems fail to identify UEFI / BIOS
 State: Solution Found (Workaround)
 Issue: Some old systems fail to identify the correct version of the BIOS / UEFI. In this case a particular script needs to implemented just for that device. Raise a ticket if you are experiencing following error message: 
 FAILURE (5616): 15299: Verify BCFBootEx (see screenshot below). 
 ![image](https://github.com/user-attachments/assets/742b9ed1-f9c4-4e13-aec6-cf3d351be297)
 Solution: Contact admin to implement fix. 
+
+## No PreInstallable Samsung Client
+State: Work in Progress
+Issue: Samsung does not provide an executable to install the Samsung Client. 
+Solution Strategy: Create an installable binary from Windows Store Gallery
