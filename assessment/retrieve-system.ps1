@@ -61,10 +61,10 @@ foreach ($grades in ($validDeviceGrades.GetEnumerator())) {
     Write-Host "[$($grades.Name)] $($grades.Value)"
 }
 
-# Prompt the user to enter the number of the employee type they want to select
+# Prompt the user to enter the number of the grade they want to select
 $deviceGradeNotification = Read-Host 'Enter the Grade of the Device type you wish to select'
 
-# Get the selected employee type based on the number entered by the user
+# Get the selected grade based on the number entered by the user
 $deviceGrade = $validDeviceGrades[$deviceGradeNotification]
 
 #Build the CSV file
